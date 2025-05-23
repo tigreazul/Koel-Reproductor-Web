@@ -25,9 +25,7 @@ const { toastWarning, toastSuccess } = useMessageToaster()
 
 const items = ref<Array<Folder | Song>>()
 
-const isForSingleFolder = computed(() => {
-  return items.value?.length === 1 && items.value[0].type === 'folders'
-})
+const isForSingleFolder = computed(() => items.value?.length === 1 && items.value[0].type === 'folders')
 
 let references: MediaReference[]
 
