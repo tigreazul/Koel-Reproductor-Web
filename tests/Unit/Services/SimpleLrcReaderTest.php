@@ -29,7 +29,11 @@ class SimpleLrcReaderTest extends TestCase
 
         File::copy(test_path('blobs/simple.lrc'), $lrcFile);
 
-        self::assertSame("Line 1\nLine 2\nLine 3", $this->reader->tryReadForMediaFile($base . '.mp3'));
+        // self::assertSame("Line 1\nLine 2\nLine 3", $this->reader->tryReadForMediaFile($base . '.mp3'));
+        self::assertSame(
+            "Line 1\nLine 2\nLine 3",
+            str_replace("\r\n", "\n", $this->reader->tryReadForMediaFile($base . '.mp3'))
+        );
         File::delete($lrcFile);
     }
 }

@@ -52,7 +52,13 @@ class LocalStorageTest extends TestCase
         $song = $this->service->storeUploadedFile(UploadedFile::fromFile(test_path('songs/full.mp3')), $user); //@phpstan-ignore-line
 
         self::assertSame($song->owner_id, $user->id);
-        self::assertSame(public_path("sandbox/media/__KOEL_UPLOADS_\${$user->id}__/full.mp3"), $song->path);
+        // self::assertSame(public_path("sandbox/media/__KOEL_UPLOADS_\${$user->id}__/full.mp3"), $song->path);
+        self::assertSame(
+            // Normaliza la ruta esperada a barras invertidas (o ambas a normales)
+            str_replace('/', DIRECTORY_SEPARATOR, public_path("sandbox/media/__KOEL_UPLOADS_\${$user->id}__/full.mp3")),
+            // Normaliza la ruta actual a barras invertidas
+            str_replace('/', DIRECTORY_SEPARATOR, $song->path)
+        );
     }
 
     #[Test]

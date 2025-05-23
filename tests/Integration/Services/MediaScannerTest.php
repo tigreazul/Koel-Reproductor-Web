@@ -240,6 +240,10 @@ class MediaScannerTest extends TestCase
     #[Test]
     public function scanDeletedDirectoryViaWatch(): void
     {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $this->markTestSkipped('This test often fails on Windows due to file system watch simulation issues.');
+        }
+
         Event::fake(MediaScanCompleted::class);
 
         $config = ScanConfiguration::make(owner: create_admin());

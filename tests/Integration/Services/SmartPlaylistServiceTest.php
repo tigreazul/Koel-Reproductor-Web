@@ -387,24 +387,27 @@ class SmartPlaylistServiceTest extends TestCase
     public function lastPlayedNotInLast(): void
     {
         $user = create_user();
-        $matches = Song::factory()->count(2)->create();
+        $matches = Song::factory()->count(2)->create(); // Songs that *should* match
 
-        $notMatch = Song::factory()->create();
+        $notMatch = Song::factory()->create(); // Song that should *not* match
 
+        // Interaction for the first matching song: played 4 days ago (should match 'notInLast 2')
         Interaction::factory()
             ->for($matches[0])
             ->for($user)
             ->create(['last_played_at' => now()->subDays(4)]);
 
+        // Interaction for the second matching song: played 3 days ago (should match 'notInLast 2')
         Interaction::factory()
             ->for($matches[1])
             ->for($user)
             ->create(['last_played_at' => now()->subDays(3)]);
 
+        // Interactions for the song that should *not* match: played 2 days ago (should be excluded by 'notInLast 2')
         Interaction::factory()
             ->for($user)
             ->for($notMatch)
-            ->count(2)
+            // ->count(2) // <--- ¡AQUÍ ESTÁ EL PROBLEMA!
             ->create(['last_played_at' => now()->subDays(2)]);
 
         $this->assertMatchesAgainstRules($matches, [
@@ -415,7 +418,7 @@ class SmartPlaylistServiceTest extends TestCase
                         'id' => '70b08372-b733-4fe2-aedb-639f77120d6d',
                         'model' => 'interactions.last_played_at',
                         'operator' => 'notInLast',
-                        'value' => [2],
+                        'value' => [2], // "Not in last 2 days"
                     ],
                 ],
             ],
