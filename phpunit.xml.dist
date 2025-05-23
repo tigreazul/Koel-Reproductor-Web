@@ -10,6 +10,7 @@
         </testsuite>
         <testsuite name="integration">
             <directory suffix="Test.php">./tests/Integration</directory>
+            <exclude>./tests/Integration/KoelPlus</exclude>
         </testsuite>
     </testsuites>
     <php>
@@ -18,14 +19,12 @@
         <env name="APP_KEY" value="16efa6c23c2e8c705826b0e66778fbe7"/>
         <env name="STORAGE_DRIVER" value="local"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <!-- "database" driver doesn't support SQLite -->
         <env name="SCOUT_DRIVER" value="tntsearch"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="LASTFM_API_KEY" value="foo"/>
         <env name="LASTFM_API_SECRET" value="bar"/>
-        <!-- Spotify integration during tests must be opt-in -->
         <env name="SPOTIFY_CLIENT_ID" value=""/>
         <env name="SPOTIFY_CLIENT_SECRET" value=""/>
         <env name="YOUTUBE_API_KEY" value="foo"/>
