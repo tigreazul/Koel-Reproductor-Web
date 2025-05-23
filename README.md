@@ -25,6 +25,11 @@ See the [Development Guide](https://docs.koel.dev/development).
 without the limitations of the mobile web version. For more information on the project,
 visit [its repository](https://github.com/koel/player).
 
+## Comando para sicronizar
+ php artisan koel:sync
+ php artisan koel:search:import
+ php artisan koel:init
+
 ## Sponsors and Backers
 
 [<img style="margin-right: 5px" src="./.github/assets/sponsors/keycdn.svg" height="42" alt="KeyCDN logo" title="KeyCDN - Content Delivery Made Easy">](https://www.keycdn.com/?a=11519)
