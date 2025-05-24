@@ -10,7 +10,6 @@ use App\Values\ScanConfiguration;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Test;
-use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 use function Tests\create_admin;
