@@ -55,8 +55,11 @@ class FileScanner
     {
         $raw = $this->getID3->analyze($this->filePath);
 
+        // Fix for "Negated boolean expression is always false."
+        // The ternary operator assignment is more explicit for PHPStan
+        // that $this->syncError can indeed be a string.
         if (Arr::get($raw, 'playtime_seconds')) {
-            $this->syncError = Arr::get($raw, 'error.0') ?: (null);
+            $this->syncError = Arr::get($raw, 'error.0') ?: null;
         } else {
             $this->syncError = Arr::get($raw, 'error.0') ?: 'Empty file';
         }
@@ -113,13 +116,17 @@ class FileScanner
             }
 
             // @todo Decouple song creation from scanning.
-            $this->song = Song::query()->updateOrCreate(['path' => $this->filePath], $data); // @phpstan-ignore-line
+            // Using a PHPDoc to explicitly tell PHPStan the type
+            /** @var Song $createdOrUpdatedSong */
+            $createdOrUpdatedSong = Song::query()->updateOrCreate(['path' => $this->filePath], $data);
+            $this->song = $createdOrUpdatedSong; // Ensure $this->song is updated with the correct type
 
             if (!$album->year && $this->song->year) {
                 $album->update(['year' => $this->song->year]);
             }
 
             if ($this->song->storage === SongStorageType::LOCAL) {
+                // PHPStan now knows $this->song is a Song
                 $this->browser->maybeCreateFolderStructureForSong($this->song);
             }
 

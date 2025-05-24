@@ -26,10 +26,11 @@ class FileScannerTest extends TestCase
         $this->scanner = app(FileScanner::class);
     }
 
-    private function path(string $subPath = ''): string
-    {
-        return realpath($this->mediaPath . $subPath);
-    }
+    // REMOVE THIS METHOD:
+    // private function path(string $subPath = ''): string
+    // {
+    //     return realpath($this->mediaPath . $subPath);
+    // }
 
 
     #[Test]

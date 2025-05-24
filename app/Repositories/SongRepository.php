@@ -15,7 +15,8 @@ use App\Models\Song;
 use App\Models\User;
 use App\Values\Genre;
 use Illuminate\Contracts\Pagination\Paginator;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection; // Alias for clarity
+use Illuminate\Support\Collection as SupportCollection; // Alias for clarity
 use Illuminate\Support\Str;
 
 /** @extends Repository<Song> */
@@ -28,14 +29,14 @@ class SongRepository extends Repository
         return Song::query()->where('path', $path)->first();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getAllStoredOnCloud(): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getAllStoredOnCloud(): EloquentCollection
     {
         return Song::query()->storedOnCloud()->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getRecentlyAdded(int $count = 10, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getRecentlyAdded(int $count = 10, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -45,8 +46,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getMostPlayed(int $count = 7, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getMostPlayed(int $count = 7, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -57,8 +58,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getRecentlyPlayed(int $count = 7, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getRecentlyPlayed(int $count = 7, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -104,13 +105,13 @@ class SongRepository extends Repository
             ->simplePaginate($perPage);
     }
 
-    /** @return Collection|array<array-key, Song> */
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
     public function getForQueue(
         array $sortColumns,
         string $sortDirection,
         int $limit = self::DEFAULT_QUEUE_LIMIT,
         ?User $scopedUser = null,
-    ): Collection {
+    ): EloquentCollection {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
             ->withMeta()
@@ -119,8 +120,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getFavorites(?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getFavorites(?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -129,8 +130,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getByAlbum(Album $album, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getByAlbum(Album $album, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -153,8 +154,8 @@ class SongRepository extends Repository
             ->simplePaginate(50);
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getByArtist(Artist $artist, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getByArtist(Artist $artist, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -168,8 +169,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getByStandardPlaylist(Playlist $playlist, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getByStandardPlaylist(Playlist $playlist, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -192,8 +193,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getRandom(int $limit, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getRandom(int $limit, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -203,8 +204,8 @@ class SongRepository extends Repository
             ->get();
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getMany(array $ids, bool $preserveOrder = false, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getMany(array $ids, bool $preserveOrder = false, ?User $scopedUser = null): EloquentCollection
     {
         $songs = Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -218,9 +219,9 @@ class SongRepository extends Repository
     /**
      * Gets several songs, but also includes collaborative information.
      *
-     * @return Collection|array<array-key, Song>
+     * @return EloquentCollection<Song> // Use EloquentCollection type hint
      */
-    public function getManyInCollaborativeContext(array $ids, ?User $scopedUser = null): Collection
+    public function getManyInCollaborativeContext(array $ids, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -234,6 +235,7 @@ class SongRepository extends Repository
                             'collaborators.id as collaborator_id',
                             'collaborators.name as collaborator_name',
                             'collaborators.email as collaborator_email',
+                            'collaborators.avatar as collaborator_avatar',
                             'playlist_song.created_at as added_at'
                         );
             })
@@ -273,8 +275,8 @@ class SongRepository extends Repository
             ->sum('length');
     }
 
-    /** @return Collection|array<array-key, Song> */
-    public function getRandomByGenre(string $genre, int $limit, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getRandomByGenre(string $genre, int $limit, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
@@ -291,23 +293,23 @@ class SongRepository extends Repository
         return $podcast->episodes()->pluck('episode_guid')->toArray();
     }
 
-    /** @return Collection<Song> */
-    public function getEpisodesByPodcast(Podcast $podcast): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getEpisodesByPodcast(Podcast $podcast): EloquentCollection
     {
         return $podcast->episodes;
     }
 
-    /** @return Collection<Song> */
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
     public function getUnderPaths(
         array $paths,
         int $limit = 500,
         bool $random = false,
         ?User $scopedUser = null
-    ): Collection {
+    ): EloquentCollection {
         $paths = self::normalizePaths($paths);
 
         if (!$paths) {
-            return collect();
+            return new EloquentCollection(); // Return an empty EloquentCollection, not a generic SupportCollection
         }
 
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
@@ -365,8 +367,8 @@ class SongRepository extends Repository
         return $removeSubpaths(array_map($normalizePath, $paths));
     }
 
-    /** @return Collection<Song> */
-    public function getInFolder(?Folder $folder = null, int $limit = 500, ?User $scopedUser = null): Collection
+    /** @return EloquentCollection<Song> */ // Use EloquentCollection type hint
+    public function getInFolder(?Folder $folder = null, int $limit = 500, ?User $scopedUser = null): EloquentCollection
     {
         return Song::query(type: PlayableType::SONG, user: $scopedUser ?? $this->auth->user())
             ->accessible()
