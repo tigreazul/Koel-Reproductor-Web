@@ -51,4 +51,10 @@
             <directory>./app/Repositories</directory>
         </exclude>
     </source>
+
+    <coverage>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+            </report>
+    </coverage>
 </phpunit>
