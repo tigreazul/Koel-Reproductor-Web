@@ -10,6 +10,7 @@ The main `useData()` API can be used to access site, theme, and page data for th
 
 ```md
 <script setup>
+
 import { useData } from 'vitepress'
 
 const { theme, page, frontmatter } = useData()
