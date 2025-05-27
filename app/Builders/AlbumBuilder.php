@@ -11,6 +11,10 @@ use Webmozart\Assert\Assert;
 
 class AlbumBuilder extends Builder
 {
+    // Se implementa constantes para opciones de ordenación
+    public const SORT_ASC = 'asc';
+    public const SORT_DESC = 'desc';
+
     public const SORT_COLUMNS_NORMALIZE_MAP = [
         'name' => 'albums.name',
         'year' => 'albums.year',
@@ -30,6 +34,10 @@ class AlbumBuilder extends Builder
         return $this->whereNot('albums.id', Album::UNKNOWN_ID);
     }
 
+    /**
+     * Filtra álbumes accesibles por un usuario.
+    * @throws LicenseException Si la licencia no soporta acceso restringido.
+    */
     public function accessibleBy(User $user): self
     {
         if (License::isCommunity()) {
@@ -60,7 +68,7 @@ class AlbumBuilder extends Builder
         $column = self::normalizeSortColumn($column);
 
         Assert::oneOf($column, self::VALID_SORT_COLUMNS);
-        Assert::oneOf(strtolower($direction), ['asc', 'desc']);
+        Assert::oneOf(strtolower($direction), [SORT_ASC, SORT_DESC]);
 
         return $this
             ->orderBy($column, $direction)

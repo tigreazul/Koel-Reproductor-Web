@@ -88,6 +88,10 @@ class Song extends Model implements AuditableContract
     protected $guarded = [];
     protected $hidden = ['updated_at', 'path', 'mtime'];
 
+    // Constantes para atributos
+    public const IS_PUBLIC = 'is_public';
+    public const OWNER_ID = 'owner_id';
+
     protected $casts = [
         'title' => SongTitleCast::class,
         'lyrics' => SongLyricsCast::class,
@@ -253,4 +257,32 @@ class Song extends Model implements AuditableContract
     {
         return $this->id;
     }
+
+    // 
+    public function scopePublic($query) {
+        return $query->where('is_public', true);
+    }
+
+    public function scopeForUser($query, User $user) {
+        return $query->where('owner_id', $user->id);
+    }
+
+    public function getDurationAttribute($value) {
+        return round($value / 60, 2);
+    }
+
+    // Accessor con tipo de retorno explícito
+    public function getDurationInMinutes(): float {
+        return round($this->attributes['duration'] / 60, 2);
+    }
+
+    // Scopes con nombres más descriptivos
+    public function scopeWherePublic($query): void {
+        $query->where(self::IS_PUBLIC, true);
+    }
+
+    public function scopeWhereOwnedBy($query, User $user): void {
+        $query->where(self::OWNER_ID, $user->id);
+    }
+
 }
