@@ -23,6 +23,30 @@ export const useFloatingUi = (
     return isRef(ref) ? ref.value! : ref
   }
 
+  const createArrow = (floatingElement: HTMLElement): HTMLElement => {
+    const arrow = document.createElement('div')
+    arrow.className = 'arrow'
+    floatingElement.appendChild(arrow)
+
+    return arrow
+  }
+
+  const setupMiddleware = (useArrow: boolean, arrow?: HTMLElement) => {
+    const middleware = [
+      flip(),
+      offset(6),
+    ]
+
+    if (useArrow && arrow) {
+      middleware.push(arrowMiddleware({
+        element: arrow,
+        padding: 6,
+      }))
+    }
+
+    return middleware
+  }
+
   const mergedConfig: Config = Object.assign({
     placement: 'bottom',
     useArrow: true,
@@ -40,23 +64,8 @@ export const useFloatingUi = (
 
     floatingElement.style.display = 'none'
 
-    const middleware = [
-      flip(),
-      offset(6),
-    ]
-
-    let arrow: HTMLElement
-
-    if (mergedConfig.useArrow) {
-      arrow = document.createElement('div')
-      arrow.className = 'arrow'
-      floatingElement.appendChild(arrow)
-
-      middleware.push(arrowMiddleware({
-        element: arrow,
-        padding: 6,
-      }))
-    }
+    const arrow = mergedConfig.useArrow ? createArrow(floatingElement) : undefined
+    const middleware = setupMiddleware(mergedConfig.useArrow, arrow)
 
     const update = async () => await updateFloatingUi(referenceElement, floatingElement, {
       placement: mergedConfig.placement,
