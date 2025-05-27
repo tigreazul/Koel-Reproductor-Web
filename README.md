@@ -2,16 +2,49 @@
 
 ![Showcase](https://user-images.githubusercontent.com/8056274/115028055-bc02a280-9ec4-11eb-991c-69cd2a45b69c.png)
 
+## Tabla de Contenidos
+
+- [Intro](#intro)
+- [Características](#características)
+- [Instalación rápida](#instalación-rápida)
+- [Guía de desarrollo](#development)
+- [Koel Player](#koel-player)
+- [Comandos útiles](#comando-para-sicronizar)
+- [Contribuir](#contribuir)
+- [Licencia](#licencia)
+- [Sponsors and Backers](#sponsors-and-backers)
+
 ## Intro
 
 **Koel** (also stylized as **koel**, with a lowercase k) is a simple web-based personal audio streaming service written
 in [Vue](http://vuejs.org/) on the client side and [Laravel](http://laravel.com/) on the server side. Targeting web
 developers, Koel embraces some of the more modern web technologies to do its job.
 
-## Install and Upgrade Guide
+## Características
 
-For system requirements, installation/upgrade guides, troubleshooting etc., head over to
-the [Official Documentation](https://docs.koel.dev).
+- Streaming de audio personal vía web
+- Interfaz moderna y responsiva
+- Soporte para colecciones grandes de música
+- Búsqueda rápida y eficiente
+- Integración con aplicaciones móviles oficiales
+- Basado en Vue.js y Laravel
+
+## Instalación rápida
+
+```bash
+git clone https://github.com/koel/koel.git
+cd koel
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan koel:init
+npm run build
+php artisan serve
+```
+
+Para más detalles, revisa la [Documentación Oficial](https://docs.koel.dev).
 
 ## Development
 
@@ -29,6 +62,15 @@ visit [its repository](https://github.com/koel/player).
  php artisan koel:sync
  php artisan koel:search:import
  php artisan koel:init
+
+## Contribuir
+
+¡Las contribuciones son bienvenidas!  
+Por favor, revisa las [guías de contribución](https://github.com/koel/koel/blob/master/CONTRIBUTING.md) y abre un issue o pull request si tienes sugerencias, mejoras o encuentras algún bug.
+
+## Licencia
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más información.
 
 ## Sponsors and Backers
 
